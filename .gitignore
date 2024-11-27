@@ -162,3 +162,6 @@ build-docs/*
 _version
 *.gguf
 src/data/*
+data/*
+*.pickle
+src/embeddings.db/*

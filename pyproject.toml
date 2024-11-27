@@ -19,6 +19,8 @@ huggingface-hub = "^0.26.2"
 streamlit = "^1.40.2"
 datasets = "^3.1.0"
 sentence-transformers = "^3.3.1"
+progress = "^1.6"
+chromadb = "^0.5.20"
 
 
 [build-system]
