@@ -166,4 +166,6 @@ data/*
 *.pickle
 src/embeddings.db/*
 src/db/*
-src/model/*
+src/embedding-model/*
+src/llm/*
+db/*

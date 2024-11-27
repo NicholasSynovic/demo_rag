@@ -5,12 +5,39 @@ from typing import List
 
 import chromadb
 import torch
-from chromadb import Collection
+from chromadb import (
+    Collection,
+    Documents,
+    EmbeddingFunction,
+    Embeddings,
+    QueryResult,
+)
 from chromadb.api import ClientAPI
 from datasets import DatasetDict, load_dataset
 from numpy import ndarray
 from progress.bar import Bar
 from sentence_transformers import SentenceTransformer
+
+
+class ChromaDBEmbeddingFunction(EmbeddingFunction):
+    def __call__(
+        self,
+        input: Documents,
+        embeddingModel: str = "all-MiniLM-L6-v2",
+        modelDir: Path = Path("./embedding-model"),
+        model_kwargs: dict = {"torch_dtype": "float16"},
+    ) -> Embeddings:
+        computeDevice: str = "cuda" if torch.cuda.is_available() else "cpu"
+
+        st: SentenceTransformer = SentenceTransformer(
+            model_name_or_path=embeddingModel,
+            model_kwargs=model_kwargs,
+            cache_folder=modelDir,
+            device=computeDevice,
+            backend="torch",
+        )
+
+        return st.encode(sentences=input)
 
 
 def downloadDataset(
@@ -87,6 +114,22 @@ def storeDocumentEmbeddings(
 
             collection.add(ids=_id, embeddings=embedding, documents=document)
             bar.next()
+
+
+def queryDB(
+    prompt: str,
+    top_n: int = 5,
+    dbPath: Path = Path("./db"),
+) -> QueryResult:
+    dbClient: ClientAPI = chromadb.PersistentClient(path=dbPath.__str__())
+    collection: Collection = dbClient.get_collection(
+        name="embeddings",
+        embedding_function=ChromaDBEmbeddingFunction(),
+    )
+    return collection.query(
+        query_texts=[prompt],
+        n_results=top_n,
+    )
 
 
 def main() -> None:
