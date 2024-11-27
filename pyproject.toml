@@ -21,6 +21,7 @@ datasets = "^3.1.0"
 sentence-transformers = "^3.3.1"
 progress = "^1.6"
 chromadb = "^0.5.20"
+click = "^8.1.7"
 
 
 [build-system]

@@ -165,3 +165,5 @@ src/data/*
 data/*
 *.pickle
 src/embeddings.db/*
+src/db/*
+src/model/*
