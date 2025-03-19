@@ -12,7 +12,7 @@ classifiers = ["Development Status :: 1 - Planning"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-vllm = "^0.6.4.post1"
+vllm = "^0.8.0"
 langchain = "0.3.8"
 langchain-community = "0.3.8"
 huggingface-hub = "^0.26.2"
